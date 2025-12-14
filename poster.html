@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poster Print 350x500</title>
+
+<style>
+/* --------- Global --------- */
+body{
+    font-family: Arial, sans-serif;
+    background:#eaeaea;
+    padding:15px;
+}
+
+/* --------- Form --------- */
+.form-box{
+    background:#fff;
+    padding:15px;
+    border-radius:8px;
+    max-width:400px;
+    margin:auto;
+}
+
+input, button{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    font-size:16px;
+}
+
+button{
+    background:#0b7d3e;
+    color:#fff;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* --------- Poster --------- */
+#poster{
+    margin:20px auto;
+    width:350px;          /* 🔴 width 350px */
+    height:500px;         /* 🔴 height 500px */
+    position:relative;
+    display:none;
+    overflow:hidden;
+    box-shadow:0 0 12px rgba(0,0,0,0.4);
+}
+
+/* Background */
+#poster .bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:0;
+}
+
+/* Content */
+#poster .content{
+    position:relative;
+    z-index:2;
+    text-align:left;
+    padding-top:220px;
+    color:#ffffff;
+}
+
+/* Photo */
+#poster .content img{
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    border:4px solid #ffffff;
+    background:#ffffff;
+}
+
+/* Name */
+#poster h2{
+    margin-top:12px;
+    font-size:22px;
+    color:#ffffff !important;
+    background:none;
+    padding:0;
+    text-shadow:2px 2px 4px rgba(0,0,0,0.8);
+}
+
+/* --------- Print (EXACT SIZE) --------- */
+@media print{
+    body *{
+        visibility:hidden;
+    }
+
+    #poster, #poster *{
+        visibility:visible;
+        color:#ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    #poster{
+        position:absolute;
+        left:0;
+        top:0;
+        width:350px;      /* 🔴 print width 350px */
+        height:500px;     /* 🔴 print height 500px */
+        margin:0;
+        background:#000;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Form -->
+<div class="form-box">
+    <h3>পোস্টার তৈরি</h3>
+    <input type="text" id="name" placeholder="আপনার নাম লিখুন">
+    <input type="file" id="photo" accept="image/*">
+    <button onclick="createPoster()">পোস্টার তৈরি</button>
+</div>
+
+<!-- Poster -->
+<div id="poster">
+    <img src="bg.jpg" class="bg" alt="Background">
+    <div class="content">
+        <br>
+        <br>
+        <img id="posterImg" alt="Photo">
+        <h2 style="text-align: center;" id="posterName"></h2>
+    </div>
+</div>
+
+<!-- Print Button -->
+<button id="printBtn" onclick="printPoster()" style="display:none;">
+    Print (350×500 px)
+</button>
+
+<script>
+function createPoster(){
+    const name = document.getElementById("name").value.trim();
+    const photo = document.getElementById("photo").files[0];
+
+    if(name === "" || !photo){
+        alert("নাম ও ছবি দিন");
+        return;
+    }
+
+    document.getElementById("posterName").innerText = name;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById("posterImg").src = e.target.result;
+    };
+    reader.readAsDataURL(photo);
+
+    poster.style.display = "block";
+    printBtn.style.display = "block";
+}
+
+function printPoster(){
+    window.print();
+}
+</script>
+
+</body>
+</html>
